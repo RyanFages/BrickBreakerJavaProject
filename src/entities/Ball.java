@@ -17,15 +17,20 @@ public class Ball {
         this.dy = dy;
     }
 
-    public void move() {
+    public void move(int offsetX, int offsetY) {
         x += dx;
         y += dy;
 
+        int leftBoundary = offsetX;
+        int rightBoundary = offsetX + Constants.WINDOW_WIDTH - diameter;
+        int topBoundary = offsetY;
+
+
         // Wall collision
-        if (x <= 0 || x >= 800 - diameter) {
+        if (x <= leftBoundary || x >= rightBoundary) {
             dx = -dx;
         }
-        if (y <= 0) {
+        if (y <= topBoundary) {
             dy = -dy;
         }
     }

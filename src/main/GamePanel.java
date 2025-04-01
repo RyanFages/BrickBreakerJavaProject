@@ -21,6 +21,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private final JButton restartButton;
 
     public GamePanel() {
+        setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         paddle = new Paddle(350, 550, 100, 10);
         ball = new Ball(400, 300, 20, -2, -3);
         brickManager = new BrickManager(5, 8);
@@ -39,8 +40,10 @@ public class GamePanel extends JPanel implements ActionListener {
         add(pauseButton);
 
         // Restart Button (Initially Hidden)
+        int buttonWidth = 100;
+        int buttonHeight = 30;
         restartButton = new JButton("Restart");
-        restartButton.setBounds(350, 300, 100, 50);
+        restartButton.setBounds((getGameWidth() - buttonWidth) / 2, (getGameHeight() - buttonHeight) / 2, 100, 50);
         restartButton.addActionListener(_ -> restartGame());
         restartButton.setVisible(false);
         add(restartButton);
@@ -49,27 +52,47 @@ public class GamePanel extends JPanel implements ActionListener {
         timer.start();
     }
 
+    public int getGameWidth() {
+        return getWidth();
+    }
+
+    public int getGameHeight() {
+        return getHeight();
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        g.setColor(Color.BLACK);
+        g.drawRect(0, 0, getGameWidth(), getGameHeight());
+
+
         paddle.draw(g);
         ball.draw(g);
         brickManager.draw(g);
 
+
         if (isGameOver) {
-            drawGameOverScreen(g);
+            drawGameOverScreen(g, getGameHeight(), getGameWidth());
         } else if (isPaused) {
-            drawPauseScreen(g);
+            drawPauseScreen(g, getGameHeight(), getGameWidth());
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!isPaused && !isGameOver) {
-            keyboardInput.update();
-            ball.move();
+            int offsetX = (getWidth() - getGameWidth()) / 2;
+            int offsetY = (getHeight() - getGameHeight()) / 2;
+
+            keyboardInput.update(offsetX);
+            ball.move(offsetX, offsetY);
             ball.checkCollision(paddle, brickManager);
-            if (ball.getY() > 600) {
+            if (ball.getY() > getGameHeight() + offsetY) {
                 gameOver();
             }
         }
@@ -94,16 +117,16 @@ public class GamePanel extends JPanel implements ActionListener {
         isPaused = false;
     }
 
-    private void drawGameOverScreen(Graphics g) {
+    private void drawGameOverScreen(Graphics g, int offsetX, int offsetY) {
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 50));
-        g.drawString("Game Over", 300, 250);
+        g.drawString("Game Over", offsetX + 150, offsetY + 250);
     }
 
-    private void drawPauseScreen(Graphics g) {
+    private void drawPauseScreen(Graphics g, int offsetX, int offsetY) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 40));
-        g.drawString("PAUSED", 350, 250);
+        g.drawString("PAUSED", offsetX + 200, offsetY + 250);
     }
 
     public Paddle getPaddle() {

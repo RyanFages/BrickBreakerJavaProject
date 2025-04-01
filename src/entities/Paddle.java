@@ -13,14 +13,16 @@ public class Paddle {
         this.height = height;
     }
 
-    public void moveLeft() {
-        if (x > 0) {
+    public void moveLeft(int offsetX) {
+        int leftBoundary = offsetX;
+        if (x > leftBoundary) {
             x -= speed;
         }
     }
 
-    public void moveRight() {
-        if (x < 800 - width) {
+    public void moveRight(int offsetX) {
+        int rightBoundary = offsetX + Constants.WINDOW_WIDTH - width;
+        if (x < rightBoundary) {
             x += speed;
         }
     }

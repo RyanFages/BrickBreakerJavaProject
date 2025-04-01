@@ -17,9 +17,16 @@ public class BrickManager {
         this.cols = cols;
         bricks = new Brick[rows][cols];
 
+        int startX = 50;
+        int startY = 50;
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                bricks[i][j] = new Brick(j * (brickWidth + 5) + 50, i * (brickHeight + 5) + 50, brickWidth, brickHeight);
+                bricks[i][j] = new Brick(
+                        startX + j * (brickWidth + 5),
+                        startY + j * (brickHeight + 5),
+                        brickWidth,
+                        brickHeight);
             }
         }
     }

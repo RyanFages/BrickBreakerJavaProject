@@ -12,9 +12,9 @@ public class KeyboardInput implements KeyListener {
         this.gamePanel = gamePanel;
     }
 
-    public void update() {
-        if (leftPressed) gamePanel.getPaddle().moveLeft();
-        if (rightPressed) gamePanel.getPaddle().moveRight();
+    public void update(int offsetX) {
+        if (leftPressed) gamePanel.getPaddle().moveLeft(offsetX);
+        if (rightPressed) gamePanel.getPaddle().moveRight(offsetX);
     }
 
     @Override
